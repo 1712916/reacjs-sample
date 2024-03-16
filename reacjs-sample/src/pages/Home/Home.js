@@ -1,7 +1,13 @@
+
+import InputView from "./InputView";
+
+
 export default function Home() {
-    return (<div>
-            <h1>Home</h1>
-            //input view
-            //dashboard chart view
-        </div>);
+	return (<div style={{padding: '20px'}}>
+		<InputView/>
+	</div>);
 }
+
+
+
+
