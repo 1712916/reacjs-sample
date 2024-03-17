@@ -1,8 +1,9 @@
 import React from "react";
+import {Box, Container, Typography} from "@mui/material";
 
-function DashboardView() {
-	return (<div>
-
-	</div>);
+export default function DashboardView() {
+	return (<Box flex={1} >
+		<Typography>Dashboard view</Typography>
+	</Box>);
 }
 
