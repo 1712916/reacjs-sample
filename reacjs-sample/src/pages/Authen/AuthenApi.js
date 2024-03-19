@@ -3,11 +3,12 @@ import { API_URL } from "../../api/ApiUtils";
 import async from "async";
 import { delay } from "../../utils/delay";
 
-export function callLogin(account, password, onSuccess, onError) {
+export async function callLogin(account, password, onSuccess, onError) {
   // Handle login logic here
   const headers = {
     "Content-Type": "application/json",
   };
+
   return axios
     .post(
       `${API_URL}/login`,
@@ -39,7 +40,6 @@ export async function callRegister(
   onSuccess,
   onError,
 ) {
-  await delay(3000);
   const headers = {
     "Content-Type": "application/json",
   };

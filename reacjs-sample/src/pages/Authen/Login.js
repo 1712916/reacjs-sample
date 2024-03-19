@@ -9,11 +9,13 @@ import {
   Typography,
 } from "@mui/material";
 import { callLogin } from "./AuthenApi";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 export default function LoginView({ onLogin, onToggleView }) {
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const requiresAreFilled = account.length > 0 && password.length > 0;
 
@@ -28,8 +30,11 @@ export default function LoginView({ onLogin, onToggleView }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Handle login logic here
+    setLoading(true);
     callLogin(account, password, onLogin, (errorMessage) => {
       setErrorMessage(errorMessage);
+    }).finally(() => {
+      setLoading(false);
     });
   };
 
@@ -77,7 +82,9 @@ export default function LoginView({ onLogin, onToggleView }) {
               {errorMessage}
             </Alert>
           )}
-          <Button
+          <LoadingButton
+            loading={isLoading}
+            loadingPosition="start"
             variant="contained"
             color="primary"
             type="submit"
@@ -85,7 +92,7 @@ export default function LoginView({ onLogin, onToggleView }) {
             onClick={handleSubmit}
           >
             Login
-          </Button>
+          </LoadingButton>
           <Button
             type="submit"
             onClick={() => {
