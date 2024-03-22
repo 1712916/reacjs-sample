@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { callLogin } from "./AuthenApi";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { setToken } from "../../api/ApiUtils";
 
 export default function LoginView({ onLogin, onToggleView }) {
   const [account, setAccount] = useState("");
@@ -31,9 +32,18 @@ export default function LoginView({ onLogin, onToggleView }) {
     event.preventDefault();
     // Handle login logic here
     setLoading(true);
-    callLogin(account, password, onLogin, (errorMessage) => {
-      setErrorMessage(errorMessage);
-    }).finally(() => {
+    callLogin(
+      account,
+      password,
+      (token) => {
+        localStorage.setItem("token", token);
+        setToken(token);
+        onLogin();
+      },
+      (errorMessage) => {
+        setErrorMessage(errorMessage);
+      },
+    ).finally(() => {
       setLoading(false);
     });
   };

@@ -10,11 +10,20 @@ import {
   Typography,
 } from "@mui/material";
 import LoginView from "./pages/Authen/Login";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AuthView from "./pages/Authen/AuthenView";
+import { setToken } from "./api/ApiUtils";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    var token = localStorage.getItem("token");
+    if (token !== null) {
+      setToken(token);
+      setIsLogin(true);
+    }
+  }, []);
 
   return !isLogin ? (
     <AuthView

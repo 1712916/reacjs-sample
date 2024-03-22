@@ -21,7 +21,8 @@ export async function callLogin(account, password, onSuccess, onError) {
     .then((response) => {
       console.log(response);
       if (response.status === 200) {
-        onSuccess();
+        let token = response.data["data"]["token"];
+        onSuccess(token);
       } else {
         onError(`Login failed: ${response.data.message}`);
       }
