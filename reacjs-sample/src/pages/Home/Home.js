@@ -1,15 +1,28 @@
 import InputView from "../ExpenseInput/InputView";
-import { Box, Container, Grid, Stack } from "@mui/material";
+import {
+  Box,
+  Container,
+  Divider,
+  Drawer,
+  Grid,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Stack,
+  Toolbar,
+} from "@mui/material";
 import DashboardView from "./DashBoardView";
+import HistoryListView from "./HistoryListView";
 
 export default function Home() {
   return (
-    <Box component="main">
+    <Stack direction="row" spacing={2} justifyContent="space-between">
       <InputView />
-      {/*<Stack direction="row" spacing={2} justifyContent="space-between">*/}
-      {/*  <InputView />*/}
-      {/*  /!*<DashboardView/>*!/*/}
-      {/*</Stack>*/}
-    </Box>
+      <Box sx={{ flexGrow: 1 }}>
+        <HistoryListView />
+      </Box>
+    </Stack>
   );
 }

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Card,
   Chip,
   Container,
   Grid,
   IconButton,
   List,
+  makeStyles,
   Snackbar,
   Stack,
   TextField,
@@ -91,123 +93,129 @@ export default function InputView() {
     );
   };
   return (
-    <Box
+    <Card
       sx={{
-        backgroundColor: "#c0d7f1",
-        p: "16px",
-        alignItems: "center",
-        width: "50%",
         m: 2,
+        p: 2,
+        // backgroundColor: "#c0d7f1",
+        // p: "16px",
+        // alignItems: "center",
       }}
     >
-      <Stack direction="row" spacing={4}>
-        <TextField
-          label="Nhập số tiền"
-          variant="outlined"
-          fullWidth
-          onChange={handleChange}
-          value={inputValue || ""} // Ensure that value is not null
-          InputProps={{
-            endAdornment: inputValue && (
-              <IconButton
-                aria-label="clear input"
-                onClick={() => setInputValue("")}
+      <Stack spacing={2}>
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container alignItems="center" spacing={2}>
+            <Grid item xs={8} sm={9} md={10} lg={10} xl={10}>
+              <TextField
+                flex={8}
+                label="Nhập số tiền"
+                variant="outlined"
+                fullWidth
+                onChange={handleChange}
+                value={inputValue || ""} // Ensure that value is not null
+                InputProps={{
+                  endAdornment: inputValue && (
+                    <IconButton
+                      aria-label="clear input"
+                      onClick={() => setInputValue("")}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={4} sm={3} md={2} lg={2} xl={2}>
+              <Button
+                flex={2}
+                disabled={inputValue === null}
+                fullWidth
+                variant="contained"
+                color="primary"
+                style={{ maxHeight: "56px", minHeight: "56px" }}
+                onClick={handleSubmit}
               >
-                <CloseIcon />
-              </IconButton>
-            ),
-          }}
-          sx={{ width: "70%" }}
-        />
-        <Button
-          disabled={inputValue === null}
-          fullWidth
-          variant="contained"
-          color="primary"
-          style={{ maxHeight: "56px", minHeight: "56px" }}
-          onClick={handleSubmit}
-          sx={{ width: "30%" }}
-        >
-          Lưu
-        </Button>
-      </Stack>
-      <Box>
-        <Typography variant="subtitle1">
-          VND: {new Intl.NumberFormat("vi-VN").format(inputValue)}
-        </Typography>
-      </Box>
-      <Stack
-        direction="row"
-        spacing={1}
-        sx={{
-          overflow: "hidden",
-        }}
-      >
-        {suggestMoneyList.map((suggestMoney, index) => (
-          <Chip
-            label={new Intl.NumberFormat("vi-VN").format(suggestMoney)}
+                Lưu
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+        <Stack spacing={1}>
+          <Typography variant="subtitle2">
+            Đang nhập (VND): {new Intl.NumberFormat("vi-VN").format(inputValue)}
+          </Typography>
+          <Grid container spacing={1}>
+            {suggestMoneyList.map((suggestMoney, index) => (
+              <Grid item key={index}>
+                <Chip
+                  label={new Intl.NumberFormat("vi-VN").format(suggestMoney)}
+                  variant="outlined"
+                  key={index}
+                  onClick={() => setInputValue(suggestMoney)}
+                >
+                  {suggestMoney.name}
+                </Chip>
+              </Grid>
+            ))}
+          </Grid>
+        </Stack>
+        <Stack spacing={1}>
+          <Typography variant="subtitle2">Ngày chi tiêu</Typography>
+          <Box width="50%">
+            <BasicDatePicker date={date} onChange={setDate} />
+          </Box>
+        </Stack>
+        <Stack spacing={1}>
+          <Typography variant="subtitle2">Loại chi tiêu</Typography>
+          <Stack direction="row" spacing={2}>
+            {categoryList.map((category, index) => (
+              <Chip
+                label={category.name}
+                variant={
+                  category.id === selectedCategory.id ? "filled" : "outlined"
+                }
+                key={index}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category.name}
+              </Chip>
+            ))}
+          </Stack>
+        </Stack>
+        <Stack spacing={1}>
+          <Typography variant="subtitle2">Nguồn tiền</Typography>
+          <Stack direction="row" spacing={1}>
+            {moneySourceList.map((moneySource, index) => (
+              <Chip
+                label={moneySource.name}
+                variant={
+                  moneySource.id === selectedMoneySource.id
+                    ? "filled"
+                    : "outlined"
+                }
+                key={index}
+                style={{ marginRight: "8px", marginBottom: "8px" }}
+                onClick={() => setSelectedMoneySource(moneySource)}
+              >
+                {moneySource.name}
+              </Chip>
+            ))}
+          </Stack>
+        </Stack>
+        <Stack spacing={1}>
+          <Typography variant="subtitle2">Ghi chú</Typography>
+          <TextField
+            id="standard-multiline-flexible"
+            label="Nhập ghi chú"
             variant="outlined"
-            key={index}
-            onClick={() => setInputValue(suggestMoney)}
-          >
-            {suggestMoney.name}
-          </Chip>
-        ))}
+            multiline
+            rows={3}
+            fullWidth
+            onChange={(event) => setNote(event.target.value)}
+            value={note || ""} // En
+          />
+        </Stack>
       </Stack>
-      <Typography>Ngày chi tiêu</Typography>
-      <BasicDatePicker date={date} onChange={setDate} />
-      <Typography>Loại chi tiêu</Typography>
-      <Stack direction="row" spacing={1}>
-        {categoryList.map((category, index) => (
-          <Chip
-            label={category.name}
-            variant={
-              category.id === selectedCategory.id ? "filled" : "outlined"
-            }
-            key={index}
-            onClick={() => setSelectedCategory(category)}
-          >
-            {category.name}
-          </Chip>
-        ))}
-      </Stack>
-
-      <Typography>Nguồn tiền</Typography>
-      {moneySourceList.map((moneySource, index) => (
-        <Chip
-          label={moneySource.name}
-          variant={
-            moneySource.id === selectedMoneySource.id ? "filled" : "outlined"
-          }
-          key={index}
-          style={{ marginRight: "8px", marginBottom: "8px" }}
-          onClick={() => setSelectedMoneySource(moneySource)}
-        >
-          {moneySource.name}
-        </Chip>
-      ))}
-      <TextField
-        label="Nhập ghi chú"
-        variant="outlined"
-        fullWidth
-        onChange={(event) => setNote(event.target.value)}
-        value={note || ""} // En
-      />
-      <Container maxWidth="sm">
-        <List>
-          {expenseList.map((expense, index) => (
-            <ExpenseCard
-              date={expense.date}
-              money={expense.money}
-              category={expense.category}
-              moneySource={expense.moneySource}
-              note={expense.note}
-              key={index}
-            />
-          ))}
-        </List>
-      </Container>
-
       <Snackbar
         open={openSnackBar}
         autoHideDuration={3000}
@@ -216,16 +224,14 @@ export default function InputView() {
         }}
         message="Add expense successfully!"
       />
-    </Box>
+    </Card>
   );
 }
 
 export function BasicDatePicker({ date, onChange }) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={["DatePicker"]}>
-        <DatePicker value={date} onChange={onChange} />
-      </DemoContainer>
+      <DatePicker value={date} onChange={onChange} />
     </LocalizationProvider>
   );
 }
