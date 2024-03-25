@@ -19,7 +19,7 @@ import { getSuggestMoneyList } from "../../utils/suggest_money";
 import ExpenseCard from "../Home/ExpenseCard";
 import {
   callGetCategoryList,
-  callGetMoneySourceList,
+  callGetMoneySource,
   callSubmitExpense,
 } from "./ExpenseApi";
 import dayjs, { Dayjs } from "dayjs";
@@ -54,7 +54,7 @@ export default function InputView() {
       () => {},
     );
 
-    callGetMoneySourceList(
+    callGetMoneySource(
       (sources) => {
         setMoneySourceList(sources);
         setSelectedMoneySource(sources[0]);

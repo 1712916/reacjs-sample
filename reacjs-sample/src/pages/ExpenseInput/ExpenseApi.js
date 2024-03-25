@@ -20,7 +20,7 @@ export function callGetCategoryList(onSuccess, onError, onDone) {
     .finally(onDone);
 }
 
-export function callAddCategoryList(category, onSuccess, onError, onDone) {
+export function callAddCategory(category, onSuccess, onError, onDone) {
   const headers = {
     Authorization: ` Bearer ${getToken()}`,
     "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export function callAddCategoryList(category, onSuccess, onError, onDone) {
     .finally(onDone);
 }
 
-export function callDeleteCategoryList(category, onSuccess, onError, onDone) {
+export function callDeleteCategory(category, onSuccess, onError, onDone) {
   const headers = {
     Authorization: ` Bearer ${getToken()}`,
     "Content-Type": "application/json",
@@ -65,13 +65,57 @@ export function callDeleteCategoryList(category, onSuccess, onError, onDone) {
     .finally(onDone);
 }
 
-export function callGetMoneySourceList(onSuccess, onError, onDone) {
+export function callGetMoneySource(onSuccess, onError, onDone) {
   const headers = {
     Authorization: ` Bearer ${getToken()}`,
     "Content-Type": "application/json",
   };
   axios
     .get(`${API_URL}/money-sources`, { headers })
+    .then((res) => {
+      var [data, message, status] = getResponseData(res.data);
+      if (status === 200) {
+        onSuccess(data);
+      }
+    })
+    .catch((err) => {
+      onError(err.data);
+    })
+    .finally(onDone);
+}
+
+export function callAddMoneySource(item, onSuccess, onError, onDone) {
+  const headers = {
+    Authorization: ` Bearer ${getToken()}`,
+    "Content-Type": "application/json",
+  };
+  axios
+    .post(
+      `${API_URL}/money-sources`,
+      {
+        name: item.name,
+      },
+      { headers },
+    )
+    .then((res) => {
+      var [data, message, status] = getResponseData(res.data);
+      if (status === 200) {
+        onSuccess(data);
+      }
+    })
+    .catch((err) => {
+      onError(err.data);
+    })
+    .finally(onDone);
+}
+
+export function callDeleteMoneySource(item, onSuccess, onError, onDone) {
+  const headers = {
+    Authorization: ` Bearer ${getToken()}`,
+    "Content-Type": "application/json",
+  };
+  axios
+    .delete(`${API_URL}/money-sources/${item.id}`, { headers })
     .then((res) => {
       var [data, message, status] = getResponseData(res.data);
       if (status === 200) {

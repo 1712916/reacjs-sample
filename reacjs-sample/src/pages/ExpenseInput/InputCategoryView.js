@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
-  callAddCategoryList,
-  callDeleteCategoryList,
+  callAddCategory,
+  callDeleteCategory,
   callGetCategoryList,
 } from "./ExpenseApi";
 import CloseIcon from "@mui/icons-material/Close";
@@ -45,7 +45,7 @@ export default function InputCategoryView() {
   };
 
   const handleSubmit = () => {
-    callAddCategoryList(
+    callAddCategory(
       {
         name: inputValue?.trim(),
       },
@@ -62,7 +62,7 @@ export default function InputCategoryView() {
   };
 
   const handleDelete = (category) => {
-    callDeleteCategoryList(
+    callDeleteCategory(
       category,
       (categories) => {
         openSnackbar("Delete category successfully!", SnackMessageType.success);
