@@ -167,40 +167,44 @@ export default function InputView() {
         </Stack>
         <Stack spacing={1}>
           <Typography variant="subtitle2">Loại chi tiêu</Typography>
-          <Stack direction="row" spacing={2}>
+          <Grid container spacing={1}>
             {categoryList.map((category, index) => (
-              <Chip
-                label={category.name}
-                variant={
-                  category.id === selectedCategory.id ? "filled" : "outlined"
-                }
-                key={index}
-                onClick={() => setSelectedCategory(category)}
-              >
-                {category.name}
-              </Chip>
+              <Grid item key={index}>
+                <Chip
+                  label={category.name}
+                  variant={
+                    category.id === selectedCategory.id ? "filled" : "outlined"
+                  }
+                  key={index}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category.name}
+                </Chip>
+              </Grid>
             ))}
-          </Stack>
+          </Grid>
         </Stack>
         <Stack spacing={1}>
           <Typography variant="subtitle2">Nguồn tiền</Typography>
-          <Stack direction="row" spacing={1}>
+          <Grid container spacing={1}>
             {moneySourceList.map((moneySource, index) => (
-              <Chip
-                label={moneySource.name}
-                variant={
-                  moneySource.id === selectedMoneySource.id
-                    ? "filled"
-                    : "outlined"
-                }
-                key={index}
-                style={{ marginRight: "8px", marginBottom: "8px" }}
-                onClick={() => setSelectedMoneySource(moneySource)}
-              >
-                {moneySource.name}
-              </Chip>
+              <Grid item key={index}>
+                <Chip
+                  label={moneySource.name}
+                  variant={
+                    moneySource.id === selectedMoneySource.id
+                      ? "filled"
+                      : "outlined"
+                  }
+                  key={index}
+                  style={{ marginRight: "8px", marginBottom: "8px" }}
+                  onClick={() => setSelectedMoneySource(moneySource)}
+                >
+                  {moneySource.name}
+                </Chip>
+              </Grid>
             ))}
-          </Stack>
+          </Grid>
         </Stack>
         <Stack spacing={1}>
           <Typography variant="subtitle2">Ghi chú</Typography>

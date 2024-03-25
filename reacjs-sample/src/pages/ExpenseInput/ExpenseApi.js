@@ -20,6 +20,51 @@ export function callGetCategoryList(onSuccess, onError, onDone) {
     .finally(onDone);
 }
 
+export function callAddCategoryList(category, onSuccess, onError, onDone) {
+  const headers = {
+    Authorization: ` Bearer ${getToken()}`,
+    "Content-Type": "application/json",
+  };
+  axios
+    .post(
+      `${API_URL}/categories`,
+      {
+        name: category.name,
+        type: 0,
+      },
+      { headers },
+    )
+    .then((res) => {
+      var [data, message, status] = getResponseData(res.data);
+      if (status === 200) {
+        onSuccess(data);
+      }
+    })
+    .catch((err) => {
+      onError(err.data);
+    })
+    .finally(onDone);
+}
+
+export function callDeleteCategoryList(category, onSuccess, onError, onDone) {
+  const headers = {
+    Authorization: ` Bearer ${getToken()}`,
+    "Content-Type": "application/json",
+  };
+  axios
+    .delete(`${API_URL}/categories/${category.id}`, { headers })
+    .then((res) => {
+      var [data, message, status] = getResponseData(res.data);
+      if (status === 200) {
+        onSuccess(data);
+      }
+    })
+    .catch((err) => {
+      onError(err.data);
+    })
+    .finally(onDone);
+}
+
 export function callGetMoneySourceList(onSuccess, onError, onDone) {
   const headers = {
     Authorization: ` Bearer ${getToken()}`,
