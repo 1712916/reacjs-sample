@@ -50,7 +50,7 @@ export default function HistoryListView() {
             <TableHead>
               <TableRow>
                 <TableCell align="left">Ngày</TableCell>
-                <TableCell align="right">Chi tiêu</TableCell>
+                <TableCell align="right">Chi tiêu (VND)</TableCell>
                 <TableCell align="right">Loại chi tiêu</TableCell>
                 <TableCell align="right">Nguồn tiền</TableCell>
                 <TableCell align="right">Ghi chú</TableCell>
@@ -62,8 +62,12 @@ export default function HistoryListView() {
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell align="left">{row.date}</TableCell>
-                  <TableCell align="right">{row.amount}</TableCell>
+                  <TableCell align="left">
+                    {dayjs(row.date).format("DD/MM/YYYY")}
+                  </TableCell>
+                  <TableCell align="right">
+                    {new Intl.NumberFormat("vi-VN").format(row.amount)}
+                  </TableCell>
                   <TableCell align="right">{row.category.name}</TableCell>
                   <TableCell align="right">{row.source.name}</TableCell>
                   <TableCell align="right">{row.description}</TableCell>

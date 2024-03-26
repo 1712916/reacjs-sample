@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import DashboardView from "./DashBoardView";
 import HistoryListView from "./HistoryListView";
-import { useState } from "react";
+import React, { useState } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { AddCard, Category, ManageSearch, PieChart } from "@mui/icons-material";
@@ -27,6 +27,7 @@ import { ScreenType } from "../ScreenType";
 import InputCategoryView from "../ExpenseInput/InputCategoryView";
 import InputMoneySourceView from "../ExpenseInput/InputMonetSourceView";
 import { SnackbarProvider, CustomSnackbar } from "../../components/SnackBar";
+import ChartView from "./ChartView";
 
 export default function Home() {
   return (
@@ -47,7 +48,7 @@ export function LoggedView({ logout }) {
   function renderView() {
     switch (viewType) {
       case ScreenType.chartView:
-        return <InputView />;
+        return <ChartView />;
       case ScreenType.tableView:
         return <HistoryListView />;
       case ScreenType.addExpenseView:
