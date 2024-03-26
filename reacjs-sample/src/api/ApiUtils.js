@@ -1,5 +1,3 @@
-import { get } from "axios";
-
 export const API_URL = "http://localhost:8080/api";
 
 var AUTH_TOKEN = "";
