@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import DashboardView from "./DashBoardView";
 import HistoryListView from "./HistoryListView";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { AddCard, Category, ManageSearch, PieChart } from "@mui/icons-material";
@@ -28,6 +28,7 @@ import InputCategoryView from "../ExpenseInput/InputCategoryView";
 import InputMoneySourceView from "../ExpenseInput/InputMonetSourceView";
 import { SnackbarProvider, CustomSnackbar } from "../../components/SnackBar";
 import ChartView from "./ChartView";
+import { Route, Routes, Link, useLocation } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -44,23 +45,76 @@ const drawerWidth = 240;
 
 export function LoggedView({ logout }) {
   const [viewType, setViewType] = useState(ScreenType.addExpenseView);
-
-  function renderView() {
-    switch (viewType) {
-      case ScreenType.chartView:
-        return <ChartView />;
-      case ScreenType.tableView:
-        return <HistoryListView />;
-      case ScreenType.addExpenseView:
-        return <InputView />;
-      case ScreenType.addCategoryView:
-        return <InputCategoryView />;
-      case ScreenType.addMoneySourceView:
-        return <InputMoneySourceView />;
+  const location = useLocation();
+  useEffect(() => {
+    switch (location.pathname) {
+      case "/expense":
+        setViewType(ScreenType.addExpenseView);
+        break;
+      case "/category":
+        setViewType(ScreenType.addCategoryView);
+        break;
+      case "/money-source":
+        setViewType(ScreenType.addMoneySourceView);
+        break;
+      case "/chart":
+        setViewType(ScreenType.chartView);
+        break;
+      case "/history":
+        setViewType(ScreenType.tableView);
+        break;
       default:
-        return <InputView />;
+        setViewType(ScreenType.addExpenseView);
     }
-  }
+  }, [location.pathname]);
+
+  const viewTypeList = [
+    {
+      type: ScreenType.addExpenseView,
+      title: "Thêm chi tiêu",
+      href: "/expense",
+      icon: <AddCircleOutlineIcon />,
+      onClick: () => {
+        setViewType(ScreenType.addExpenseView);
+      },
+    },
+    {
+      type: ScreenType.addCategoryView,
+      title: "Thêm loại chi tiêu",
+      href: "/category",
+      icon: <Category />,
+      onClick: () => {
+        setViewType(ScreenType.addCategoryView);
+      },
+    },
+    {
+      type: ScreenType.addMoneySourceView,
+      title: "Thêm nguồn tiền",
+      href: "/money-source",
+      icon: <AddCard />,
+      onClick: () => {
+        setViewType(ScreenType.addMoneySourceView);
+      },
+    },
+    {
+      type: ScreenType.chartView,
+      title: "Biểu đồ",
+      href: "/chart",
+      icon: <PieChart />,
+      onClick: () => {
+        setViewType(ScreenType.chartView);
+      },
+    },
+    {
+      type: ScreenType.tableView,
+      title: "Lịch sử",
+      href: "/history",
+      icon: <ManageSearch />,
+      onClick: () => {
+        setViewType(ScreenType.tableView);
+      },
+    },
+  ];
 
   return (
     <SnackbarProvider>
@@ -109,66 +163,20 @@ export function LoggedView({ logout }) {
             <Toolbar />
             <Box sx={{ overflow: "auto" }}>
               <List>
-                <ListItem key={"Expense"} disablePadding>
-                  <ListItemButton
-                    onClick={() => {
-                      setViewType(ScreenType.addExpenseView);
-                    }}
-                  >
-                    <ListItemIcon>
-                      <AddCircleOutlineIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={"Add New"} />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem key={"Category"} disablePadding>
-                  <ListItemButton
-                    onClick={() => {
-                      setViewType(ScreenType.addCategoryView);
-                    }}
-                  >
-                    <ListItemIcon>
-                      <Category />
-                    </ListItemIcon>
-                    <ListItemText primary={"Category"} />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem key={"MoneySource"} disablePadding>
-                  <ListItemButton
-                    onClick={() => {
-                      setViewType(ScreenType.addMoneySourceView);
-                    }}
-                  >
-                    <ListItemIcon>
-                      <AddCard />
-                    </ListItemIcon>
-                    <ListItemText primary={"Money Source"} />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem key={"Chart"} disablePadding>
-                  <ListItemButton
-                    onClick={() => {
-                      setViewType(ScreenType.chartView);
-                    }}
-                  >
-                    <ListItemIcon>
-                      <PieChart />
-                    </ListItemIcon>
-                    <ListItemText primary={"Chart"} />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem key={"Table"} disablePadding>
-                  <ListItemButton
-                    onClick={() => {
-                      setViewType(ScreenType.tableView);
-                    }}
-                  >
-                    <ListItemIcon>
-                      <ManageSearch />
-                    </ListItemIcon>
-                    <ListItemText primary={"Table"} />
-                  </ListItemButton>
-                </ListItem>
+                {viewTypeList.map((view) => (
+                  <ListItem key={view.type} disablePadding>
+                    <ListItemButton
+                      component={Link}
+                      to={view.href}
+                      selected={view.type === viewType}
+                      onClick={view.onClick}
+                    >
+                      <ListItemIcon>{view.icon}</ListItemIcon>
+                      <ListItemText primary={view.title} />
+                    </ListItemButton>
+                    <Link to={view.href}></Link>
+                  </ListItem>
+                ))}
               </List>
             </Box>
           </Drawer>
@@ -177,7 +185,15 @@ export function LoggedView({ logout }) {
             sx={{ width: "100%", maxWidth: "100%", overflow: "hidden" }}
           >
             <Toolbar />
-            {renderView()}
+            <Routes>
+              <Route path="/" element={<InputView />} />
+              <Route path="/expense" element={<InputView />} />
+              <Route path="/category" element={<InputCategoryView />} />
+              <Route path="/money-source" element={<InputMoneySourceView />} />
+              <Route path="/chart" element={<ChartView />} />
+              <Route path="/history" element={<HistoryListView />} />
+            </Routes>
+            {/*{renderView()}*/}
           </Box>
         </Box>
         <Box>{/*<CustomSnackbar />*/}</Box>

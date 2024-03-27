@@ -266,10 +266,7 @@ export function TodayExpenseList({ date }) {
     callGetTodayExpenseList(
       date,
       (data) => {
-        for (var a of data) {
-          console.log(JSON.stringify(a));
-        }
-        setList(data);
+        setList(data.reverse());
       },
       (err) => {},
       (done) => {},
