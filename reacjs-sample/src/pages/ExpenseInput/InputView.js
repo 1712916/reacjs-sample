@@ -238,7 +238,7 @@ export default function InputView() {
           </Card>
         </Grid>
         <Grid xs={4}>
-          <TodayExpenseList />
+          <TodayExpenseList date={date} />
         </Grid>
       </Grid>
     </Box>
@@ -253,7 +253,7 @@ export function BasicDatePicker({ date, onChange }) {
   );
 }
 
-export function TodayExpenseList() {
+export function TodayExpenseList({ date }) {
   const [list, setList] = useState([]);
   const { openSnackbar } = useSnackbar();
 
@@ -264,6 +264,7 @@ export function TodayExpenseList() {
 
   useEffect(() => {
     callGetTodayExpenseList(
+      date,
       (data) => {
         for (var a of data) {
           console.log(JSON.stringify(a));
@@ -273,11 +274,15 @@ export function TodayExpenseList() {
       (err) => {},
       (done) => {},
     );
-  }, []);
+  }, [date]);
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h5">Hôm nay</Typography>
+      <Typography variant="h5">
+        {date.isSame(dayjs().format("YYYY-MM-DD"), "day")
+          ? "Hôm nay"
+          : date.format("DD-MM-YYYY")}
+      </Typography>
       <Typography variant="h5">{moneyFormat(total)}</Typography>
       {list.map((e, index) => (
         <ExpenseCard

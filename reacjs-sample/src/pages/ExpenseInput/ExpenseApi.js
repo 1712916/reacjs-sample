@@ -195,13 +195,13 @@ export function callGetExpenseList(onSuccess, onError, onDone) {
     .finally(onDone);
 }
 
-export function callGetTodayExpenseList(onSuccess, onError, onDone) {
+export function callGetTodayExpenseList(date, onSuccess, onError, onDone) {
   const headers = {
     Authorization: ` Bearer ${getToken()}`,
     "Content-Type": "application/json",
   };
   axios
-    .get(`${API_URL}/expenses`, { headers })
+    .get(`${API_URL}/expenses/date/${date.format("YYYY-MM-DD")}`, { headers })
     .then((res) => {
       var [data, message, status] = getResponseData(res.data);
 
