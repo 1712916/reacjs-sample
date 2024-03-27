@@ -100,7 +100,7 @@ export default function InputCategoryView() {
                   endAdornment: inputValue && (
                     <IconButton
                       aria-label="clear input"
-                      onClick={() => setInputValue("")}
+                      onClick={() => setInputValue(null)}
                     >
                       <CloseIcon />
                     </IconButton>

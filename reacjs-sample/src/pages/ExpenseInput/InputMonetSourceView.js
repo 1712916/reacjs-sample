@@ -109,7 +109,7 @@ export default function InputMoneySourceView() {
                   endAdornment: inputValue && (
                     <IconButton
                       aria-label="clear input"
-                      onClick={() => setInputValue("")}
+                      onClick={() => setInputValue(null)}
                     >
                       <CloseIcon />
                     </IconButton>

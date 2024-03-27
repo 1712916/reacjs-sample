@@ -127,7 +127,7 @@ export default function InputView() {
                         endAdornment: inputValue && (
                           <IconButton
                             aria-label="clear input"
-                            onClick={() => setInputValue("")}
+                            onClick={() => setInputValue(null)}
                           >
                             <CloseIcon />
                           </IconButton>
