@@ -29,6 +29,7 @@ import InputMoneySourceView from "../ExpenseInput/InputMonetSourceView";
 import { SnackbarProvider, CustomSnackbar } from "../../components/SnackBar";
 import ChartView from "./ChartView";
 import { Route, Routes, Link, useLocation } from "react-router-dom";
+import InputExpenseView from "../ExpenseInput/InputExpenseView";
 
 export default function Home() {
   return (
@@ -123,15 +124,13 @@ export function LoggedView({ logout }) {
           <CssBaseline />
           <AppBar
             position="fixed"
-            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          >
+            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Toolbar variant="dense">
               <Typography
                 variant="h6"
                 color="inherit"
                 component="div"
-                sx={{ flexGrow: 1 }}
-              >
+                sx={{ flexGrow: 1 }}>
                 My Expense
               </Typography>
               <IconButton
@@ -143,8 +142,7 @@ export function LoggedView({ logout }) {
                   logout();
                   localStorage.removeItem("token");
                 }}
-                color="inherit"
-              >
+                color="inherit">
                 <LogoutIcon />
               </IconButton>
             </Toolbar>
@@ -158,8 +156,7 @@ export function LoggedView({ logout }) {
                 width: drawerWidth,
                 boxSizing: "border-box",
               },
-            }}
-          >
+            }}>
             <Toolbar />
             <Box sx={{ overflow: "auto" }}>
               <List>
@@ -169,8 +166,7 @@ export function LoggedView({ logout }) {
                       component={Link}
                       to={view.href}
                       selected={view.type === viewType}
-                      onClick={view.onClick}
-                    >
+                      onClick={view.onClick}>
                       <ListItemIcon>{view.icon}</ListItemIcon>
                       <ListItemText primary={view.title} />
                     </ListItemButton>
@@ -182,12 +178,11 @@ export function LoggedView({ logout }) {
           </Drawer>
           <Box
             component="main"
-            sx={{ width: "100%", maxWidth: "100%", overflow: "hidden" }}
-          >
+            sx={{ width: "100%", maxWidth: "100%", overflow: "hidden" }}>
             <Toolbar />
             <Routes>
-              <Route path="/" element={<InputView />} />
-              <Route path="/expense" element={<InputView />} />
+              <Route path="/" element={<InputExpenseView />} />
+              <Route path="/expense" element={<InputExpenseView />} />
               <Route path="/category" element={<InputCategoryView />} />
               <Route path="/money-source" element={<InputMoneySourceView />} />
               <Route path="/chart" element={<ChartView />} />
