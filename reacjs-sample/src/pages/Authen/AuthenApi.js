@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from "../../api/ApiUtils";
+import { API_URL, getResponseData, getToken } from "../../api/ApiUtils";
 import async from "async";
 import { delay } from "../../utils/delay";
 
@@ -16,7 +16,7 @@ export async function callLogin(account, password, onSuccess, onError) {
         account: account,
         password: password,
       },
-      { headers },
+      { headers }
     )
     .then((response) => {
       console.log(response);
@@ -39,7 +39,7 @@ export async function callRegister(
   password,
   email,
   onSuccess,
-  onError,
+  onError
 ) {
   const headers = {
     "Content-Type": "application/json",
@@ -52,7 +52,7 @@ export async function callRegister(
         password: password,
         email: email,
       },
-      { headers },
+      { headers }
     )
     .then((response) => {
       console.log(response);
@@ -66,4 +66,24 @@ export async function callRegister(
       console.log(error);
       onError(`Register failed: ${error.message}`);
     });
+}
+
+export function callGetLoginStatus(onSuccess, onError, onDone) {
+  const headers = {
+    Authorization: ` Bearer ${getToken()}`,
+    "Content-Type": "application/json",
+  };
+  axios
+    .get(`${API_URL}/authorization`, { headers })
+    .then((res) => {
+      var [data, message, status] = getResponseData(res.data);
+
+      if (status === 200) {
+        onSuccess(data);
+      }
+    })
+    .catch((err) => {
+      onError(err.data);
+    })
+    .finally(onDone);
 }
