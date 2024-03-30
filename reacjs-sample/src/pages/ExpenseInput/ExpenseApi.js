@@ -32,7 +32,7 @@ export function callAddCategory(category, onSuccess, onError, onDone) {
         name: category.name,
         type: 0,
       },
-      { headers },
+      { headers }
     )
     .then((res) => {
       var [data, message, status] = getResponseData(res.data);
@@ -95,7 +95,7 @@ export function callAddMoneySource(item, onSuccess, onError, onDone) {
       {
         name: item.name,
       },
-      { headers },
+      { headers }
     )
     .then((res) => {
       var [data, message, status] = getResponseData(res.data);
@@ -160,13 +160,15 @@ export function callSubmitExpense(expense, onSuccess, onError, onDone) {
         source: expense.source,
         date: expense.date,
       },
-      { headers },
+      { headers }
     )
     .then((res) => {
       var [data, message, status] = getResponseData(res.data);
 
       if (status === 201) {
         onSuccess(data);
+      } else {
+        onError(message);
       }
     })
     .catch((err) => {

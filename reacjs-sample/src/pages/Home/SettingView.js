@@ -1,52 +1,95 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
   Card,
+  Checkbox,
   Chip,
-  Collapse,
-  FormControlLabel,
+  Container,
   Grid,
-  Grow,
   IconButton,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Paper,
   Stack,
-  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
   TextField,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { getSuggestMoneyList } from "../../utils/suggest_money";
+import ExpenseCard from "./ExpenseCard";
 import {
   callGetCategoryList,
+  callGetDeleteExpense,
+  callGetExpenseList,
   callGetMoneySource,
-  callSubmitExpense,
-} from "./ExpenseApi";
-import { SnackMessageType, useSnackbar } from "../../components/SnackBar";
-import { BasicDatePicker } from "../../components/BasicDatePicker";
-import { StarBorder } from "@mui/icons-material";
-import { getSuggestExpenseList } from "../Home/SettingView";
-import SuggestExpenseCard from "./SuggestExpenseCard";
+} from "../ExpenseInput/ExpenseApi";
+import dayjs from "dayjs";
+import { useSnackbar } from "../../components/SnackBar";
+import { Close } from "@mui/icons-material";
+import { moneyFormat } from "../../utils/number_utils";
+import { getSuggestMoneyList } from "../../utils/suggest_money";
 
-export default function InputView({ date, setDate, onAddSuccess }) {
+const suggest_expenses_key = "suggest_expenses";
+
+export function getSuggestExpenseList() {
+  var expenses = localStorage.getItem(suggest_expenses_key);
+  if (expenses !== null) {
+    return JSON.parse(expenses);
+  }
+  return null;
+}
+
+export default function SettingView() {
+  const [expenseList, setExpenseList] = useState([]);
+
+  useEffect(() => {
+    var expenses = localStorage.getItem(suggest_expenses_key);
+    if (expenses !== null) {
+      setExpenseList(JSON.parse(expenses));
+    }
+  }, []);
+
+  function storageExpenseList(expenseList) {
+    setExpenseList(expenseList);
+    localStorage.setItem(suggest_expenses_key, JSON.stringify(expenseList));
+  }
+
+  return (
+    <Box sx={{ flexGrow: 1, m: 1, p: 1 }}>
+      <Grid container spacing={1}>
+        <Grid xs={8}>
+          <InputView
+            onAddSuccess={(expense) => {
+              storageExpenseList([expense, ...expenseList]);
+            }}
+          />
+        </Grid>
+        <Grid xs={4}>
+          <TodayExpenseList
+            list={expenseList}
+            onRemoveAtIndex={(index) => {
+              expenseList.splice(index, 1);
+              storageExpenseList([...expenseList]);
+            }}
+          />
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+function InputView({ onAddSuccess }) {
   const [inputValue, setInputValue] = useState(null);
   const [suggestMoneyList, setSuggestMoneyList] = useState([]);
-  const [suggestExpenseList, setSuggestExpenseList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
   const [moneySourceList, setMoneySourceList] = useState([]);
   const [selectedMoneySource, setSelectedMoneySource] = useState();
-  const [note, setNote] = useState();
   const { openSnackbar } = useSnackbar();
-  const [checked, setChecked] = React.useState(false);
-
-  const handleSuggestSwitchChange = () => {
-    setChecked((prev) => !prev);
-  };
 
   useEffect(() => {
     setSuggestMoneyList(getSuggestMoneyList(inputValue));
@@ -68,8 +111,6 @@ export default function InputView({ date, setDate, onAddSuccess }) {
       },
       () => {}
     );
-
-    setSuggestExpenseList(getSuggestExpenseList() ?? []);
   }, []);
 
   const handleChange = (event) => {
@@ -83,48 +124,11 @@ export default function InputView({ date, setDate, onAddSuccess }) {
     const expense = {
       amount: inputValue,
       category: selectedCategory,
-      description: note,
       type: 0,
       source: selectedMoneySource,
-      date: date.format("YYYY-MM-DDTHH:mm:ss"),
     };
-    callAddExpense(expense);
-  };
 
-  const callAddExpense = (expense) => {
-    callSubmitExpense(
-      expense,
-      (res) => {
-        openSnackbar("Thêm thành công", SnackMessageType.success);
-        onAddSuccess(res);
-        setInputValue(null);
-        setNote(null);
-      },
-      (err) => {
-        alert(err);
-      },
-      () => {}
-    );
-  };
-
-  const handleAddExpenseFromSuggestion = (suggestExpense) => {
-    const expense = {
-      amount: suggestExpense.amount,
-      category: suggestExpense.category,
-      type: 0,
-      description: null,
-      source: suggestExpense.source,
-      date: date.format("YYYY-MM-DDTHH:mm:ss"),
-    };
-    // alert(JSON.stringify(expense));
-    callAddExpense({
-      amount: suggestExpense.amount,
-      category: suggestExpense.category,
-      type: 0,
-      description: null,
-      source: suggestExpense.source,
-      date: date.format("YYYY-MM-DDTHH:mm:ss"),
-    });
+    onAddSuccess(expense);
   };
 
   return (
@@ -152,7 +156,7 @@ export default function InputView({ date, setDate, onAddSuccess }) {
                     <IconButton
                       aria-label="clear input"
                       onClick={() => setInputValue(null)}>
-                      <CloseIcon />
+                      <Close />
                     </IconButton>
                   ),
                 }}
@@ -190,45 +194,7 @@ export default function InputView({ date, setDate, onAddSuccess }) {
             ))}
           </Grid>
         </Stack>
-        <Stack spacing={1}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Typography variant="subtitle2">Gợi ý</Typography>
 
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={checked}
-                  onChange={handleSuggestSwitchChange}
-                />
-              }
-            />
-          </Stack>
-          <Collapse in={checked} timeout="auto" unmountOnExit>
-            <Grid container spacing={1}>
-              {suggestExpenseList.map((e, i) => (
-                <Grid item xs={4}>
-                  <SuggestExpenseCard
-                    expense={e}
-                    onSelect={() => handleAddExpenseFromSuggestion(e)}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-            {/* <Box display="flex" overflow="scroll" p={1}>
-              <Stack direction="row" spacing={2}>
-                {suggestExpenseList.map((e, i) => (
-                  <SuggestExpenseCard expense={e} />
-                ))}
-              </Stack>
-            </Box> */}
-          </Collapse>
-        </Stack>
-        <Stack spacing={1}>
-          <Typography variant="subtitle2">Ngày chi tiêu</Typography>
-          <Box width="50%">
-            <BasicDatePicker date={date} onChange={setDate} />
-          </Box>
-        </Stack>
         <Stack spacing={1}>
           <Typography variant="subtitle2">Loại chi tiêu</Typography>
           <Grid container spacing={1}>
@@ -268,36 +234,28 @@ export default function InputView({ date, setDate, onAddSuccess }) {
             ))}
           </Grid>
         </Stack>
-        <Stack spacing={1}>
-          <Typography variant="subtitle2">Ghi chú</Typography>
-          <TextField
-            id="standard-multiline-flexible"
-            label="Nhập ghi chú"
-            variant="outlined"
-            multiline
-            rows={3}
-            fullWidth
-            onChange={(event) => setNote(event.target.value)}
-            value={note || ""} // En
-          />
-        </Stack>
       </Stack>
     </Card>
   );
 }
 
-const icon = (
-  <Paper sx={{ m: 1, width: 100, height: 100 }} elevation={4}>
-    <svg>
-      <Box
-        component="polygon"
-        points="0,100 50,00, 100,100"
-        sx={{
-          fill: (theme) => theme.palette.common.white,
-          stroke: (theme) => theme.palette.divider,
-          strokeWidth: 1,
-        }}
-      />
-    </svg>
-  </Paper>
-);
+function TodayExpenseList({ date, list, onRemoveAtIndex }) {
+  const total = list.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.amount,
+    0
+  );
+
+  return (
+    <Stack spacing={2}>
+      <Typography variant="h5">{moneyFormat(total)}</Typography>
+      {list.map((e, index) => (
+        <ExpenseCard
+          expense={e}
+          onDelete={() => {
+            onRemoveAtIndex(index);
+          }}
+        />
+      ))}
+    </Stack>
+  );
+}

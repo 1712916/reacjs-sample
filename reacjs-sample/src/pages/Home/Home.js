@@ -18,7 +18,13 @@ import HistoryListView from "./HistoryListView";
 import React, { useEffect, useState } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { AddCard, Category, ManageSearch, PieChart } from "@mui/icons-material";
+import {
+  AddCard,
+  Category,
+  ManageSearch,
+  PieChart,
+  Settings,
+} from "@mui/icons-material";
 import { ScreenType } from "../ScreenType";
 import InputCategoryView from "../ExpenseInput/InputCategoryView";
 import InputMoneySourceView from "../ExpenseInput/InputMonetSourceView";
@@ -26,6 +32,7 @@ import { SnackbarProvider } from "../../components/SnackBar";
 import ChartView from "./ChartView";
 import { Route, Routes, Link, useLocation } from "react-router-dom";
 import InputExpenseView from "../ExpenseInput/InputExpenseView";
+import SettingView from "./SettingView";
 
 export default function Home() {
   return (
@@ -111,6 +118,15 @@ export function LoggedView({ logout }) {
         setViewType(ScreenType.tableView);
       },
     },
+    {
+      type: ScreenType.tableView,
+      title: "Cài đặt",
+      href: "/setting",
+      icon: <Settings />,
+      onClick: () => {
+        setViewType(ScreenType.settingView);
+      },
+    },
   ];
 
   return (
@@ -183,6 +199,7 @@ export function LoggedView({ logout }) {
               <Route path="/money-source" element={<InputMoneySourceView />} />
               <Route path="/chart" element={<ChartView />} />
               <Route path="/history" element={<HistoryListView />} />
+              <Route path="/setting" element={<SettingView />} />
             </Routes>
             {/*{renderView()}*/}
           </Box>
