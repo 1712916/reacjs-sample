@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import ExpenseCard from "../Home/ExpenseCard";
 import { moneyFormat } from "../../utils/number_utils";
 
-export function TodayExpenseList({ date, list, onRemoveAtIndex }) {
+export function TodayExpenseList({ date, list, onRemoveAtIndex, isDragging }) {
   const { openSnackbar } = useSnackbar();
 
   const total = list.reduce(
@@ -38,6 +38,7 @@ export function TodayExpenseList({ date, list, onRemoveAtIndex }) {
               () => {}
             );
           }}
+          isDragging={isDragging}
         />
       ))}
     </Stack>

@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Button,
   Card,
   CardActions,
@@ -15,8 +16,14 @@ import dayjs from "dayjs";
 import { deepPurple } from "@mui/material/colors";
 import { getListFirstLetter, stringToColor } from "../../utils/string_utils";
 import { Delete, DeleteOutlined } from "@mui/icons-material";
+import { Droppable } from "react-beautiful-dnd";
 
-export default function ExpenseCard({ expense, showDate, onDelete }) {
+export default function ExpenseCard({
+  expense,
+  showDate,
+  onDelete,
+  isDragging,
+}) {
   return (
     <Card>
       <CardHeader
@@ -39,8 +46,18 @@ export default function ExpenseCard({ expense, showDate, onDelete }) {
             {dayjs(expense.date).format("DD/MM/YYYY")}
           </Typography>
         )}
-        <Stack direction="row" spacing={1}>
-          <Chip label={expense.category.name} variant="outlined" />
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Droppable droppableId={expense.id}>
+            {(provided, snapshot) => (
+              <Box
+                sx={{ p: 1, border: isDragging ? "2px dashed red" : "" }}
+                {...provided.droppableProps}
+                ref={provided.innerRef}>
+                <Chip label={expense.category.name} variant="outlined" />
+              </Box>
+            )}
+          </Droppable>
+
           <Chip label={expense.source.name} variant="outlined" />
         </Stack>
       </CardContent>

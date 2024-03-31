@@ -31,6 +31,7 @@ import { BasicDatePicker } from "../../components/BasicDatePicker";
 import { StarBorder } from "@mui/icons-material";
 import { getSuggestExpenseList } from "../Home/SettingView";
 import SuggestExpenseCard from "./SuggestExpenseCard";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 
 export default function InputView({ date, setDate, onAddSuccess }) {
   const [inputValue, setInputValue] = useState(null);
@@ -231,21 +232,43 @@ export default function InputView({ date, setDate, onAddSuccess }) {
         </Stack>
         <Stack spacing={1}>
           <Typography variant="subtitle2">Loại chi tiêu</Typography>
-          <Grid container spacing={1}>
-            {categoryList.map((category, index) => (
-              <Grid item key={index}>
-                <Chip
-                  label={category.name}
-                  variant={
-                    category.id === selectedCategory.id ? "filled" : "outlined"
-                  }
-                  key={index}
-                  onClick={() => setSelectedCategory(category)}>
-                  {category.name}
-                </Chip>
+          <Droppable droppableId="category" isDropDisabled={false}>
+            {(provided) => (
+              <Grid
+                container
+                spacing={1}
+                {...provided.droppableProps}
+                ref={provided.innerRef}>
+                {categoryList.map((category, index) => (
+                  <Draggable
+                    key={category.id}
+                    draggableId={category.id}
+                    index={index}>
+                    {(provided) => (
+                      <Grid
+                        item
+                        key={index}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}>
+                        <Chip
+                          label={category.name}
+                          variant={
+                            category.id === selectedCategory.id
+                              ? "filled"
+                              : "outlined"
+                          }
+                          key={index}
+                          onClick={() => setSelectedCategory(category)}>
+                          {category.name}
+                        </Chip>
+                      </Grid>
+                    )}
+                  </Draggable>
+                ))}
               </Grid>
-            ))}
-          </Grid>
+            )}
+          </Droppable>
         </Stack>
         <Stack spacing={1}>
           <Typography variant="subtitle2">Nguồn tiền</Typography>
