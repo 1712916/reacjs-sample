@@ -33,11 +33,16 @@ import { getSuggestExpenseList } from "../Home/SettingView";
 import SuggestExpenseCard from "./SuggestExpenseCard";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 
-export default function InputView({ date, setDate, onAddSuccess }) {
+export default function InputView({
+  date,
+  setDate,
+  onAddSuccess,
+  categoryList,
+  setCategoryList,
+}) {
   const [inputValue, setInputValue] = useState(null);
   const [suggestMoneyList, setSuggestMoneyList] = useState([]);
   const [suggestExpenseList, setSuggestExpenseList] = useState([]);
-  const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
   const [moneySourceList, setMoneySourceList] = useState([]);
   const [selectedMoneySource, setSelectedMoneySource] = useState();
@@ -232,7 +237,7 @@ export default function InputView({ date, setDate, onAddSuccess }) {
         </Stack>
         <Stack spacing={1}>
           <Typography variant="subtitle2">Loại chi tiêu</Typography>
-          <Droppable droppableId="category" isDropDisabled={false}>
+          <Droppable droppableId="category" isDropDisabled={true}>
             {(provided) => (
               <Grid
                 container

@@ -3,13 +3,16 @@ import InputView from "./InputView";
 import { TodayExpenseList } from "./TodayExpenseList";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { callGetTodayExpenseList } from "./ExpenseApi";
+import { callGetTodayExpenseList, callUpdateExpense } from "./ExpenseApi";
 import { DragDropContext } from "react-beautiful-dnd";
+import { SnackMessageType, useSnackbar } from "../../components/SnackBar";
 
 export default function InputExpenseView() {
   const [date, setDate] = useState(dayjs());
   const [list, setList] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [categoryList, setCategoryList] = useState([]);
+  const { openSnackbar } = useSnackbar();
 
   useEffect(() => {
     callGetTodayExpenseList(
@@ -24,7 +27,7 @@ export default function InputExpenseView() {
 
   function handleOnDragEnd(result) {
     setIsDragging(false);
-    // alert(JSON.stringify(result));
+
     const destination = result.destination;
     if (!result.destination) return;
 
@@ -38,14 +41,32 @@ export default function InputExpenseView() {
 
     const categoryIndex = result.source.index;
 
-    const category = null; //todo
+    const category = categoryList[categoryIndex];
 
-    //todo: call api update category
+    const oldExpense = { ...list[expenseIndex] };
+    const newExpense = { ...list[expenseIndex] };
 
-    //update local list
-    list[expenseIndex].category = category;
+    newExpense.category = category;
+
+    list[expenseIndex] = newExpense;
 
     setList([...list]);
+    //todo: call api update category
+    callUpdateExpense(
+      newExpense,
+      () => {
+        //update success
+      },
+      (err) => {
+        //update error reverse session
+        list[expenseIndex] = oldExpense;
+
+        setList([...list]);
+
+        openSnackbar(`${err}`, SnackMessageType.error);
+      },
+      () => {}
+    );
   }
 
   return (
@@ -63,6 +84,8 @@ export default function InputExpenseView() {
               onAddSuccess={(expense) => {
                 setList([expense, ...list]);
               }}
+              categoryList={categoryList}
+              setCategoryList={setCategoryList}
             />
           </Grid>
           <Grid xs={4}>
