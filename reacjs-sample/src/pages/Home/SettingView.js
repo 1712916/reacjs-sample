@@ -22,16 +22,16 @@ import {
 } from "@mui/material";
 import ExpenseCard from "./ExpenseCard";
 import {
-  callGetCategoryList,
-  callGetDeleteExpense,
+  callDeleteExpense,
   callGetExpenseList,
-  callGetMoneySource,
 } from "../ExpenseInput/ExpenseApi";
 import dayjs from "dayjs";
 import { useSnackbar } from "../../components/SnackBar";
 import { Close } from "@mui/icons-material";
 import { moneyFormat } from "../../utils/number_utils";
 import { getSuggestMoneyList } from "../../utils/suggest_money";
+import { callGetCategoryList } from "../ExpenseInput/CategoryApi";
+import { callGetMoneySource } from "../ExpenseInput/MoneySourceApi";
 
 const suggest_expenses_key = "suggest_expenses";
 
@@ -248,14 +248,15 @@ function TodayExpenseList({ date, list, onRemoveAtIndex }) {
   return (
     <Stack spacing={2}>
       <Typography variant="h5">{moneyFormat(total)}</Typography>
-      {list.map((e, index) => (
+      //todo: add drag and drop view here
+      {/* {list.map((e, index) => (
         <ExpenseCard
           expense={e}
           onDelete={() => {
             onRemoveAtIndex(index);
           }}
         />
-      ))}
+      ))} */}
     </Stack>
   );
 }

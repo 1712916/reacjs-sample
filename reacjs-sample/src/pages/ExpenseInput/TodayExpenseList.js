@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SnackMessageType, useSnackbar } from "../../components/SnackBar";
-import { callGetDeleteExpense, callGetTodayExpenseList } from "./ExpenseApi";
+import { callDeleteExpense, callGetTodayExpenseList } from "./ExpenseApi";
 import { Stack, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import ExpenseCard from "../Home/ExpenseCard";
@@ -26,7 +26,7 @@ export function TodayExpenseList({ date, list, onRemoveAtIndex, isDragging }) {
         <ExpenseCard
           expense={e}
           onDelete={() => {
-            callGetDeleteExpense(
+            callDeleteExpense(
               e,
               () => {
                 openSnackbar("Xoá thành công", SnackMessageType.success);

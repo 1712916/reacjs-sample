@@ -21,17 +21,15 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { getSuggestMoneyList } from "../../utils/suggest_money";
-import {
-  callGetCategoryList,
-  callGetMoneySource,
-  callSubmitExpense,
-} from "./ExpenseApi";
+import { callSubmitExpense } from "./ExpenseApi";
 import { SnackMessageType, useSnackbar } from "../../components/SnackBar";
 import { BasicDatePicker } from "../../components/BasicDatePicker";
 import { StarBorder } from "@mui/icons-material";
 import { getSuggestExpenseList } from "../Home/SettingView";
 import SuggestExpenseCard from "./SuggestExpenseCard";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import { callGetCategoryList } from "./CategoryApi";
+import { callGetMoneySource } from "./MoneySourceApi";
 
 export default function InputView({
   date,
@@ -237,39 +235,57 @@ export default function InputView({
         </Stack>
         <Stack spacing={1}>
           <Typography variant="subtitle2">Loại chi tiêu</Typography>
-          <Droppable droppableId="category" isDropDisabled={true}>
-            {(provided) => (
+          <Droppable
+            droppableId="category"
+            isDropDisabled={true}
+            direction="horizontal">
+            {(provided, snapshot) => (
               <Grid
                 container
                 spacing={1}
                 {...provided.droppableProps}
-                ref={provided.innerRef}>
+                ref={provided.innerRef}
+                isDraggingOver={snapshot.isDraggingOver}>
                 {categoryList.map((category, index) => (
-                  <Draggable
-                    key={category.id}
-                    draggableId={category.id}
-                    index={index}>
-                    {(provided) => (
-                      <Grid
-                        item
-                        key={index}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}>
-                        <Chip
-                          label={category.name}
-                          variant={
-                            category.id === selectedCategory.id
-                              ? "filled"
-                              : "outlined"
-                          }
-                          key={index}
-                          onClick={() => setSelectedCategory(category)}>
-                          {category.name}
-                        </Chip>
-                      </Grid>
-                    )}
-                  </Draggable>
+                  <Grid item>
+                    <Draggable
+                      key={category.id}
+                      draggableId={category.id}
+                      index={index}>
+                      {(provided, snapshot) => (
+                        <div>
+                          <Chip
+                            key={index}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={provided.draggableProps.style}
+                            label={category.name}
+                            variant={
+                              category.id === selectedCategory.id
+                                ? "filled"
+                                : "outlined"
+                            }
+                            onClick={() => setSelectedCategory(category)}>
+                            {category.name}
+                          </Chip>
+                          {snapshot.isDragging && (
+                            <Chip
+                              label={category.name}
+                              variant={
+                                category.id === selectedCategory.id
+                                  ? "filled"
+                                  : "outlined"
+                              }
+                              key={index}
+                              onClick={() => setSelectedCategory(category)}>
+                              {category.name}
+                            </Chip>
+                          )}
+                        </div>
+                      )}
+                    </Draggable>
+                  </Grid>
                 ))}
               </Grid>
             )}

@@ -27,7 +27,7 @@ import {
 } from "@mui/icons-material";
 import { ScreenType } from "../ScreenType";
 import InputCategoryView from "../ExpenseInput/InputCategoryView";
-import InputMoneySourceView from "../ExpenseInput/InputMonetSourceView";
+import InputMoneySourceView from "../ExpenseInput/InputMoneySourceView";
 import { SnackbarProvider } from "../../components/SnackBar";
 import ChartView from "./ChartView";
 import { Route, Routes, Link, useLocation } from "react-router-dom";
@@ -119,7 +119,7 @@ export function LoggedView({ logout }) {
       },
     },
     {
-      type: ScreenType.tableView,
+      type: ScreenType.settingView,
       title: "Cài đặt",
       href: "/setting",
       icon: <Settings />,

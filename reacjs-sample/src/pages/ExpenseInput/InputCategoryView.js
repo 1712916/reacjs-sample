@@ -14,7 +14,7 @@ import {
   callAddCategory,
   callDeleteCategory,
   callGetCategoryList,
-} from "./ExpenseApi";
+} from "./CategoryApi";
 import CloseIcon from "@mui/icons-material/Close";
 import { SnackMessageType, useSnackbar } from "../../components/SnackBar";
 
@@ -35,7 +35,7 @@ export default function InputCategoryView() {
         setCategoryList(categories);
         setSelectedCategory(categories[0]);
       },
-      () => {},
+      () => {}
     );
   }
 
@@ -56,7 +56,7 @@ export default function InputCategoryView() {
       (err) => {
         openSnackbar(`${err}`, SnackMessageType.error);
       },
-      () => {},
+      () => {}
     );
   };
 
@@ -71,7 +71,7 @@ export default function InputCategoryView() {
       (err) => {
         openSnackbar(`${err}`, SnackMessageType.error);
       },
-      () => {},
+      () => {}
     );
   };
 
@@ -82,8 +82,7 @@ export default function InputCategoryView() {
         p: 2, // backgroundColor: "#c0d7f1",
         // p: "16px",
         // alignItems: "center",
-      }}
-    >
+      }}>
       <Stack spacing={2}>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container alignItems="center" spacing={2}>
@@ -99,8 +98,7 @@ export default function InputCategoryView() {
                   endAdornment: inputValue && (
                     <IconButton
                       aria-label="clear input"
-                      onClick={() => setInputValue(null)}
-                    >
+                      onClick={() => setInputValue(null)}>
                       <CloseIcon />
                     </IconButton>
                   ),
@@ -115,8 +113,7 @@ export default function InputCategoryView() {
                 variant="contained"
                 color="primary"
                 style={{ maxHeight: "56px", minHeight: "56px" }}
-                onClick={handleSubmit}
-              >
+                onClick={handleSubmit}>
                 Lưu
               </Button>
             </Grid>
@@ -138,8 +135,7 @@ export default function InputCategoryView() {
                   onClick={() => setSelectedCategory(category)}
                   onDelete={() => {
                     handleDelete(category);
-                  }}
-                >
+                  }}>
                   {category.name}
                 </Chip>
               </Grid>
