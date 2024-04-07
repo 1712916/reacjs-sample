@@ -4,6 +4,8 @@ import {
   Card,
   Checkbox,
   Container,
+  IconButton,
+  InputAdornment,
   Paper,
   Stack,
   Table,
@@ -13,14 +15,21 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
+  TextField,
   Typography,
 } from "@mui/material";
 import ExpenseCard from "./ExpenseCard";
 import { callGetExpenseList } from "../ExpenseInput/ExpenseApi";
 import dayjs from "dayjs";
+import { Close, Search } from "@mui/icons-material";
 
 export default function HistoryListView() {
   const [expenseList, setExpenseList] = useState([]);
+  const [searchInput, setSearchInput] = useState();
+
+  const handleChange = (event) => {
+    setSearchInput(event.target.value);
+  };
 
   useEffect(() => {
     callGetExpenseList(
@@ -33,7 +42,7 @@ export default function HistoryListView() {
         setExpenseList(data);
       },
       (err) => {},
-      () => {},
+      () => {}
     );
   }, []);
 
@@ -41,9 +50,17 @@ export default function HistoryListView() {
     <Container
       sx={{
         m: 2,
-      }}
-    >
+      }}>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
       <Stack spacing={2}>
+        <SearchBar
+          input={searchInput || ""}
+          onChange={handleChange}
+          onEnter={() => {
+            alert("Please select: " + searchInput);
+          }}
+          onClearInput={() => {
+            setSearchInput(null);
+          }}></SearchBar>
         <Typography variant="h4">Lịch sử</Typography>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -60,8 +77,7 @@ export default function HistoryListView() {
               {expenseList.map((row, index) => (
                 <TableRow
                   key={index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell align="left">
                     {dayjs(row.date).format("DD/MM/YYYY")}
                   </TableCell>
@@ -78,5 +94,35 @@ export default function HistoryListView() {
         </TableContainer>
       </Stack>
     </Container>
+  );
+}
+
+function SearchBar({ input, onChange, onEnter, onClearInput }) {
+  return (
+    <TextField
+      value={input}
+      onChange={onChange}
+      placeholder="Nhập ghi chú"
+      InputProps={{
+        sx: {
+          borderRadius: 20,
+        },
+        startAdornment: (
+          <InputAdornment position="start">
+            <Search />
+          </InputAdornment>
+        ),
+        endAdornment: input && (
+          <IconButton aria-label="clear input" onClick={onClearInput}>
+            <Close />
+          </IconButton>
+        ),
+      }}
+      onKeyDown={(ev) => {
+        if (ev.key === "Enter") {
+          onEnter();
+        }
+      }}
+    />
   );
 }

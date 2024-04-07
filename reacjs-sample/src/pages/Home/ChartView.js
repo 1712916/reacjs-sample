@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import {
+  Autocomplete,
   Box,
   Card,
+  CardContent,
+  CardHeader,
   Checkbox,
   Container,
+  Grid,
   Paper,
   Stack,
   Table,
@@ -19,61 +23,75 @@ import ExpenseCard from "./ExpenseCard";
 import { callGetExpenseList } from "../ExpenseInput/ExpenseApi";
 import dayjs from "dayjs";
 import { PieChart } from "@mui/x-charts/PieChart";
+import {
+  callGetTotalExpenseOfCurrentMonth,
+  callGetTotalExpenseOfLastMonth,
+} from "../ExpenseInput/TotalExpenseApi";
+import { moneyFormat } from "../../utils/number_utils";
+import { BasicDatePicker } from "../../components/BasicDatePicker";
+import PercentChartView from "../Chart/PercentView";
 
 export default function ChartView() {
-  const [chart, setChart] = useState([]);
-
-  useEffect(() => {
-    callGetExpenseList(
-      (data) => {
-        data.sort((a, b) => {
-          const d1 = dayjs(a.date, "YYYY-MM-DDTHH:mm:ss");
-          const d2 = dayjs(b.date, "YYYY-MM-DDTHH:mm:ss");
-          return d2.diff(d1);
-        });
-
-        const chartData = {};
-
-        for (const e of data) {
-          const a = chartData[e.category.name];
-          if (a === undefined) {
-            chartData[e.category.name] = e.amount;
-          } else {
-            chartData[e.category.name] += e.amount;
-          }
-        }
-
-        const formattedChartData = Object.keys(chartData).map((key, index) => ({
-          id: index,
-          value: chartData[key],
-          label: key,
-        }));
-        setChart(formattedChartData);
-      },
-      (err) => {},
-      () => {},
-    );
-  }, []);
-
   return (
     <Container
       sx={{
         m: 2,
-      }}
-    >
+      }}>
       <Stack spacing={2}>
-        <Typography variant="h4">Biểu đồ</Typography>
-
-        <PieChart
-          series={[
-            {
-              data: chart,
-            },
-          ]}
-          width={800}
-          height={400}
-        />
+        <Box sx={{ flexGrow: 1 }}>
+          <Stack direction="row" spacing={2}>
+            <CurrentMonthTotalExpenseCard />
+            <LastMonthTotalExpenseCard />
+          </Stack>
+        </Box>
+        <PercentChartView />
       </Stack>
     </Container>
+  );
+}
+
+function CurrentMonthTotalExpenseCard() {
+  const [totalExpense, setTotalExpense] = useState(0);
+
+  useEffect(() => {
+    callGetTotalExpenseOfCurrentMonth(
+      (data) => {
+        setTotalExpense(data);
+      },
+      (err) => {},
+      () => {}
+    );
+  }, []);
+
+  return (
+    <Card>
+      <CardHeader title="Tháng này" />
+      <CardContent>
+        <Typography variant="h4">{moneyFormat(totalExpense)}</Typography>
+      </CardContent>
+    </Card>
+  );
+}
+
+function LastMonthTotalExpenseCard() {
+  const [totalExpense, setTotalExpense] = useState(0);
+
+  useEffect(() => {
+    callGetTotalExpenseOfLastMonth(
+      (data) => {
+        setTotalExpense(data);
+      },
+      (err) => {},
+      () => {}
+    );
+  }, []);
+
+  return (
+    <Card>
+      <CardHeader title="Tháng trước" />
+      <CardContent>
+        <Typography variant="h4">{moneyFormat(totalExpense)}</Typography>
+      </CardContent>
+    </Card>
   );
 }
