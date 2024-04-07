@@ -34,6 +34,7 @@ import {
 } from "../../utils/date_utils";
 import { callGetTotalExpenseByCategory } from "./TotalExpenseByCategoryApi";
 import { BasicDateRangePicker } from "../../components/BasicDateRangePicker";
+import { moneyFormat } from "../../utils/number_utils";
 
 const filters = ["Tháng này", "Tháng trước", "3 tháng gần nhất", "Tuỳ chỉnh"];
 
@@ -125,6 +126,8 @@ export default function PercentChartView() {
           ) : (
             <Box />
           )}
+          <Typography variant="h6">Tổng: {moneyFormat(TOTAL)}</Typography>
+
           {/* {filter === 3 && (
     <BasicDateRangePicker />
     // start={startDate}
@@ -134,7 +137,6 @@ export default function PercentChartView() {
     // }}
   )} */}
         </Stack>
-
         <Grid container>
           <Grid item></Grid>
 
