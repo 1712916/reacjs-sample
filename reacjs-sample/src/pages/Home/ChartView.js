@@ -30,6 +30,7 @@ import {
 import { moneyFormat } from "../../utils/number_utils";
 import { BasicDatePicker } from "../../components/BasicDatePicker";
 import PercentChartView from "../Chart/PercentView";
+import WeekExpenseChart from "../Chart/WeekExpenseChart";
 
 export default function ChartView() {
   return (
@@ -45,6 +46,7 @@ export default function ChartView() {
           </Stack>
         </Box>
         <PercentChartView />
+        <WeekExpenseChart />
       </Stack>
     </Container>
   );
