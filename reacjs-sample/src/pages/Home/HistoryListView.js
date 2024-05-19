@@ -34,11 +34,11 @@ export default function HistoryListView() {
   useEffect(() => {
     callGetExpenseList(
       (data) => {
-        data.sort((a, b) => {
-          const d1 = dayjs(a.date, "YYYY-MM-DDTHH:mm:ss");
-          const d2 = dayjs(b.date, "YYYY-MM-DDTHH:mm:ss");
-          return d2.diff(d1);
-        });
+        // data.sort((a, b) => {
+        //   const d1 = dayjs(a.date, "YYYY-MM-DDTHH:mm:ss");
+        //   const d2 = dayjs(b.date, "YYYY-MM-DDTHH:mm:ss");
+        //   return d2.diff(d1);
+        // });
         setExpenseList(data);
       },
       (err) => {},
@@ -50,7 +50,9 @@ export default function HistoryListView() {
     <Container
       sx={{
         m: 2,
-      }}>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+      }}>
+      {" "}
+                                                                        
       <Stack spacing={2}>
         <SearchBar
           input={searchInput || ""}
