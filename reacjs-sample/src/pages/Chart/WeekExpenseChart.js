@@ -3,6 +3,7 @@ import { LineChart } from "@mui/x-charts";
 import { useEffect, useState } from "react";
 import { getWeekCurrentWeekDays, weekDays } from "../../utils/date_utils";
 import { callGetListTotalExpenseFromDateToDate } from "../ExpenseInput/TotalExpenseApi";
+import { chartHeight } from "../Home/ChartView";
 
 export default function WeekExpenseChart() {
   const [data, setData] = useState([]);
@@ -27,8 +28,20 @@ export default function WeekExpenseChart() {
     );
   }, []);
 
+  // return (
+  //   <Box
+  //     height={100}
+  //     sx={{
+  //       width: "100%",
+  //       background: "red",
+  //     }}></Box>
+  // );
+
   return (
-    <Box>
+    <Box
+      sx={{
+        width: "100%",
+      }}>
       <Stack spacing={1}>
         <Typography variant="h3">Tuần này</Typography>
         <LineChart
@@ -38,8 +51,7 @@ export default function WeekExpenseChart() {
               data: data,
             },
           ]}
-          width={1000}
-          height={500}
+          height={chartHeight}
         />
       </Stack>
     </Box>

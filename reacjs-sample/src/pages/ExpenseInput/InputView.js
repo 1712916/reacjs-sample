@@ -118,7 +118,7 @@ export default function InputView({
       type: 0,
       description: null,
       source: suggestExpense.source,
-      date: date.format("YYYY-MM-DDTHH:mm:ss"),
+      date: date.format("YYYY-MM-DD"),
     };
     // alert(JSON.stringify(expense));
     callAddExpense({

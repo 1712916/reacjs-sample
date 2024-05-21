@@ -29,6 +29,7 @@ import { useEffect, useState } from "react";
 import { callGetTotalExpenseByMonths } from "./TotalExpenseByMonthApi";
 import { axisClasses } from "@mui/x-charts";
 import { moneyFormat } from "../../utils/number_utils";
+import { chartHeight } from "../Home/ChartView";
 
 export default function MonthChartView() {
   const [months, setMonths] = useState([]);
@@ -46,8 +47,6 @@ export default function MonthChartView() {
 
   const chartSetting = {
     series: [{ dataKey: "amount" }],
-    width: 1000,
-    height: 500,
   };
 
   const monthFormatter = (value) => `Tháng ${value}`;
@@ -90,6 +89,7 @@ export default function MonthChartView() {
               },
             ]}
             {...chartSetting}
+            height={chartHeight}
           />
         )}
       </Stack>

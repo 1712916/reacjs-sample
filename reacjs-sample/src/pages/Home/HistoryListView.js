@@ -12,39 +12,55 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
+  TablePagination,
   TableRow,
   TableSortLabel,
   TextField,
   Typography,
 } from "@mui/material";
 import ExpenseCard from "./ExpenseCard";
-import { callGetExpenseList } from "../ExpenseInput/ExpenseApi";
+import {
+  callGetExpenseList,
+  callSearchExpenseList,
+} from "../ExpenseInput/ExpenseApi";
 import dayjs from "dayjs";
 import { Close, Search } from "@mui/icons-material";
 
 export default function HistoryListView() {
   const [expenseList, setExpenseList] = useState([]);
   const [searchInput, setSearchInput] = useState();
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const handleChange = (event) => {
     setSearchInput(event.target.value);
   };
 
   useEffect(() => {
-    callGetExpenseList(
+    callSearchExpenseList(
+      {
+        offset: page,
+        limit: limit,
+      },
       (data) => {
-        // data.sort((a, b) => {
-        //   const d1 = dayjs(a.date, "YYYY-MM-DDTHH:mm:ss");
-        //   const d2 = dayjs(b.date, "YYYY-MM-DDTHH:mm:ss");
-        //   return d2.diff(d1);
-        // });
-        setExpenseList(data);
+        setExpenseList(data.list);
+        setTotal(data.total);
       },
       (err) => {},
       () => {}
     );
-  }, []);
+  }, [page, limit]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setLimit(parseInt(event.target.value, 10));
+  };
 
   return (
     <Container
@@ -92,6 +108,28 @@ export default function HistoryListView() {
                 </TableRow>
               ))}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={3}
+                  count={total}
+                  rowsPerPage={limit}
+                  page={page}
+                  slotProps={{
+                    select: {
+                      inputProps: {
+                        "aria-label": "rows per page",
+                      },
+                      native: true,
+                    },
+                  }}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  // ActionsComponent={TablePaginationActions}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </TableContainer>
       </Stack>

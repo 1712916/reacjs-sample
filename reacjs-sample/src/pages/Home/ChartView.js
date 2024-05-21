@@ -34,9 +34,19 @@ import WeekExpenseChart from "../Chart/WeekExpenseChart";
 import MonthChartView from "../Chart/MonthChartView";
 import QuarterChartView from "../Chart/QuarterChartView";
 
+export const chartHeight = 400;
+
 export default function ChartView() {
+  function GirdItem({ view }) {
+    return (
+      <Grid container item xs={12} sm={12} md={12} lg={6} xl={3}>
+        {view}
+      </Grid>
+    );
+  }
+
   return (
-    <Container
+    <Box
       sx={{
         m: 2,
       }}>
@@ -47,12 +57,14 @@ export default function ChartView() {
             <LastMonthTotalExpenseCard />
           </Stack>
         </Box>
-        <PercentChartView />
-        <WeekExpenseChart />
-        <MonthChartView />
-        <QuarterChartView />
+        <Grid container>
+          <GirdItem view={<PercentChartView />} />
+          <GirdItem view={<WeekExpenseChart />} />
+          <GirdItem view={<MonthChartView />} />
+          <GirdItem view={<QuarterChartView />} />
+        </Grid>
       </Stack>
-    </Container>
+    </Box>
   );
 }
 

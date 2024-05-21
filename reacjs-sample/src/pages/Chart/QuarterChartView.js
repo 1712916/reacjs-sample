@@ -32,6 +32,7 @@ import {
 } from "./TotalExpenseByMonthApi";
 import { axisClasses } from "@mui/x-charts";
 import { moneyFormat } from "../../utils/number_utils";
+import { chartHeight } from "../Home/ChartView";
 
 export default function QuarterChartView() {
   const [quarter, setQuarter] = useState([]);
@@ -40,7 +41,6 @@ export default function QuarterChartView() {
     callGetTotalExpenseByQuarters(
       2024,
       (data) => {
-        alert(JSON.stringify(data));
         setQuarter(data);
       },
       (err) => {},
@@ -50,8 +50,6 @@ export default function QuarterChartView() {
 
   const chartSetting = {
     series: [{ dataKey: "amount" }],
-    width: 1000,
-    height: 500,
   };
 
   const quaterFormatter = (value) => `Quý ${value}`;
@@ -94,6 +92,7 @@ export default function QuarterChartView() {
               },
             ]}
             {...chartSetting}
+            height={chartHeight}
           />
         )}
       </Stack>

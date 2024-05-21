@@ -159,3 +159,30 @@ export function callDeleteExpense(expense, onSuccess, onError, onDone) {
     })
     .finally(onDone);
 }
+
+export function callSearchExpenseList(request, onSuccess, onError, onDone) {
+  const headers = {
+    Authorization: ` Bearer ${getToken()}`,
+    "Content-Type": "application/json",
+  };
+
+  var limit = request.limit;
+  var offset = request.offset;
+  var keyword = request.keyword;
+
+  axios
+    .get(`${API_URL}/expenses/search?page=${offset}&page_size=${limit}`, {
+      headers,
+    })
+    .then((res) => {
+      var [data, message, status] = getResponseData(res.data);
+
+      if (status === 200) {
+        onSuccess(data);
+      }
+    })
+    .catch((err) => {
+      onError(err.data);
+    })
+    .finally(onDone);
+}

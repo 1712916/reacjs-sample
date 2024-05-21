@@ -35,6 +35,7 @@ import {
 import { callGetTotalExpenseByCategory } from "./TotalExpenseByCategoryApi";
 import { BasicDateRangePicker } from "../../components/BasicDateRangePicker";
 import { moneyFormat } from "../../utils/number_utils";
+import { chartHeight } from "../Home/ChartView";
 
 const filters = ["Tháng này", "Tháng trước", "3 tháng gần nhất", "Tuỳ chỉnh"];
 
@@ -102,7 +103,10 @@ export default function PercentChartView() {
   };
 
   return (
-    <Box>
+    <Box
+      sx={{
+        width: "100%",
+      }}>
       <Stack spacing={1}>
         <Typography variant="h3">Tỉ lệ chi tiêu</Typography>
 
@@ -137,20 +141,16 @@ export default function PercentChartView() {
     // }}
   )} */}
         </Stack>
-        <Grid container>
-          <Grid item></Grid>
 
-          <PieChart
-            series={[
-              {
-                data: chart,
-                arcLabel: getArcLabel,
-              },
-            ]}
-            width={800}
-            height={400}
-          />
-        </Grid>
+        <PieChart
+          series={[
+            {
+              data: chart,
+              arcLabel: getArcLabel,
+            },
+          ]}
+          height={chartHeight}
+        />
       </Stack>
     </Box>
   );
