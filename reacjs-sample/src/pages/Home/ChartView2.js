@@ -85,20 +85,6 @@ export default function ChartView2() {
   }
 
   useEffect(() => {
-    if (startDate !== null && endDate !== null) {
-      callGetCategoriesCount(
-        startDate,
-        endDate,
-        (data) => {
-          setCategoryList(data);
-        },
-        () => {},
-        () => {}
-      );
-    }
-  }, [startDate, endDate]);
-
-  useEffect(() => {
     setCategorySelectedList(new Set());
     switch (filter) {
       case 0:
@@ -120,6 +106,22 @@ export default function ChartView2() {
         break;
     }
   }, [filter]);
+
+  useEffect(() => {
+    console.log("start date:2 ", startDate);
+    console.log("last date: 2", endDate);
+    if (startDate !== null && endDate !== null) {
+      callGetCategoriesCount(
+        startDate,
+        endDate,
+        (data) => {
+          setCategoryList(data);
+        },
+        () => {},
+        () => {}
+      );
+    }
+  }, [startDate, endDate]);
 
   useEffect(() => {
     console.log("start date: ", startDate);
