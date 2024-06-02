@@ -35,3 +35,35 @@ export function callGetTotalExpenseByCategory(
       .finally(onDone);
   } catch (e) {}
 }
+
+export function callGetTotalExpenseByCategoryIds(
+  idList,
+  startDate,
+  endDate,
+  onSuccess,
+  onError,
+  onDone
+) {
+  const headers = {
+    Authorization: ` Bearer ${getToken()}`,
+    "Content-Type": "application/json",
+  };
+  try {
+    var idList = "&id=" + idList.join("&id=");
+    axios
+      .get(
+        `${API_URL}/expenses/category/total/ids?fromDate=${startDate.format(dateFormatPattern)}&toDate=${endDate.format(dateFormatPattern)}${idList}`,
+        { headers }
+      )
+      .then((res) => {
+        var [data, message, status] = getResponseData(res.data);
+        if (status === 200) {
+          onSuccess(data);
+        }
+      })
+      .catch((err) => {
+        onError(err.data);
+      })
+      .finally(onDone);
+  } catch (e) {}
+}

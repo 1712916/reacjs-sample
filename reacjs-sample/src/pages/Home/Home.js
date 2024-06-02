@@ -33,6 +33,7 @@ import ChartView from "./ChartView";
 import { Route, Routes, Link, useLocation } from "react-router-dom";
 import InputExpenseView from "../ExpenseInput/InputExpenseView";
 import SettingView from "./SettingView";
+import ChartView2 from "./ChartView2";
 
 export default function Home() {
   return (
@@ -63,6 +64,9 @@ export function LoggedView({ logout }) {
         break;
       case "/chart":
         setViewType(ScreenType.chartView);
+        break;
+      case "/chart/category":
+        setViewType(ScreenType.chartViewCategory);
         break;
       case "/history":
         setViewType(ScreenType.tableView);
@@ -107,6 +111,15 @@ export function LoggedView({ logout }) {
       icon: <PieChart />,
       onClick: () => {
         setViewType(ScreenType.chartView);
+      },
+    },
+    {
+      type: ScreenType.chartViewCategory,
+      title: "Biểu đồ theo loại chi tiêu",
+      href: "/chart/category",
+      icon: <PieChart />,
+      onClick: () => {
+        setViewType(ScreenType.chartViewCategory);
       },
     },
     {
@@ -198,6 +211,7 @@ export function LoggedView({ logout }) {
               <Route path="/category" element={<InputCategoryView />} />
               <Route path="/money-source" element={<InputMoneySourceView />} />
               <Route path="/chart" element={<ChartView />} />
+              <Route path="/chart/category" element={<ChartView2 />} />
               <Route path="/history" element={<HistoryListView />} />
               <Route path="/setting" element={<SettingView />} />
             </Routes>

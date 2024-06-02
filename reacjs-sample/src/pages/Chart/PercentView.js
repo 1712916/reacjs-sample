@@ -37,7 +37,12 @@ import { BasicDateRangePicker } from "../../components/BasicDateRangePicker";
 import { moneyFormat } from "../../utils/number_utils";
 import { chartHeight } from "../Home/ChartView";
 
-const filters = ["Tháng này", "Tháng trước", "3 tháng gần nhất", "Tuỳ chỉnh"];
+export const filters = [
+  "Tháng này",
+  "Tháng trước",
+  "3 tháng gần nhất",
+  "Tuỳ chỉnh",
+];
 
 export default function PercentChartView() {
   const [chart, setChart] = useState([]);
@@ -81,6 +86,7 @@ export default function PercentChartView() {
                 id: e.id,
                 value: e.amount,
                 label: e.name,
+                color: stringToColor(e.name),
               };
             })
           );
